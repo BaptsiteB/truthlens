@@ -1,7 +1,39 @@
 import './App.css';
 import React, { useState } from 'react';
 
+
+
+const renderHeartBar = (score) => {
+  const fullHearts = Math.floor(score / 10);
+  const remainder = score % 10;
+
+  let halfHeart = 0;
+  if (remainder >= 5) {
+    halfHeart = 1;
+  }
+
+  const blackHearts = 10 - fullHearts - halfHeart;
+
+  const hearts = [];
+
+  for (let i = 0; i < fullHearts; i++) {
+    hearts.push(<img key={`red-${i}`} src="/coeur_rouge.png" alt="coeur rouge" className="heart" />);
+  }
+
+  if (halfHeart) {
+    hearts.push(<img key="half" src="/coeur_demi.png" alt="coeur demi" className="heart" />);
+  }
+
+  for (let i = 0; i < blackHearts; i++) {
+    hearts.push(<img key={`black-${i}`} src="/coeur_noir.png" alt="coeur noir" className="heart" />);
+  }
+
+  return hearts;
+};
+
 function App() {
+
+  const [score_barre, setScoreBarre] = useState(45);
 
   const [showTweet, setShowTweet] = useState(false);
 
@@ -51,7 +83,15 @@ function App() {
               Jul 3, 2023 at 11:11 AM
             </div>
           </div>
+          
         )}
+            <div className="reliability">
+              <h2>Fiabilité : {score_barre}%</h2>
+              <div className="heart-bar">
+                {renderHeartBar(score_barre)}
+              </div>
+            </div>
+        
       </main>
     </div>
   );
