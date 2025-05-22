@@ -71,26 +71,28 @@ function App() {
         </button>
 
         {showTweet && (
-          <div className="tweet-card">
-            <div className="tweet-header">
-              <span className="tweet-author">Emily <span className="tweet-emoji">🦋</span></span>
-              <span className="tweet-username">@emilyliu.me</span>
+          <>
+            <div className="tweet-card">
+              <div className="tweet-header">
+                <span className="tweet-author">Emily <span className="tweet-emoji">🦋</span></span>
+                <span className="tweet-username">@emilyliu.me</span>
+              </div>
+              <div className="tweet-content">
+                logging on for my shift at the posting factory
+              </div>
+              <div className="tweet-date">
+                Jul 3, 2023 at 11:11 AM
+              </div>
             </div>
-            <div className="tweet-content">
-              logging on for my shift at the posting factory
-            </div>
-            <div className="tweet-date">
-              Jul 3, 2023 at 11:11 AM
-            </div>
-          </div>
-          
-        )}
+
             <div className="reliability">
               <h2>Fiabilité : {score_barre}%</h2>
               <div className="heart-bar">
                 {renderHeartBar(score_barre)}
               </div>
             </div>
+          </>
+        )}
         
       </main>
     </div>
