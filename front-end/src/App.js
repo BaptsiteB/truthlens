@@ -1,6 +1,14 @@
 import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+
+  const [showTweet, setShowTweet] = useState(false);
+
+  const handleAnalyzeClick = () => {
+    setShowTweet(true); // simulation de réponse
+  };
+
   return (
     <div className="app">
       <header className="navbar">
@@ -26,7 +34,24 @@ function App() {
           placeholder="Insérez le lien d'un tweet"
           className="tweet-input"
         />
-        <button className="analyze-button">Analyser</button>
+        <button className="analyze-button" onClick={handleAnalyzeClick}>
+          Analyser
+        </button>
+
+        {showTweet && (
+          <div className="tweet-card">
+            <div className="tweet-header">
+              <span className="tweet-author">Emily <span className="tweet-emoji">🦋</span></span>
+              <span className="tweet-username">@emilyliu.me</span>
+            </div>
+            <div className="tweet-content">
+              logging on for my shift at the posting factory
+            </div>
+            <div className="tweet-date">
+              Jul 3, 2023 at 11:11 AM
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
