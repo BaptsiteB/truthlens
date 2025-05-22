@@ -50,6 +50,12 @@ body {
   background-color: #2a2c32;
 }
 
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espace entre logo et h3 */
+}
+
 .logo {
   height: 60px;
 }
@@ -79,6 +85,13 @@ h2 {
   font-size: 20px;
   font-weight: bold;
   margin-top: 20px;
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0;
+  font-family: 'Triforce', serif;
 }
 
 .tweet-input {

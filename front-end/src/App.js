@@ -4,7 +4,10 @@ function App() {
   return (
     <div className="app">
       <header className="navbar">
-        <img src="/truthlens_logo.png" alt="Truth Lens Logo" className="logo" />
+        <div className="logo-title">
+          <img src="/truthlens_logo.png" alt="Truth Lens Logo" className="logo" />
+          <h3>Truth Lens</h3>
+        </div>
         <nav className="nav-links">
           <a href="#">Accueil</a>
           <a href="#">Mon profil</a>
