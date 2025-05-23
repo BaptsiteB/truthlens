@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState } from 'react';
 
 
+let fiabilite_score = -51
 
 const renderHeartBar = (score) => {
   const fullHearts = Math.floor(score / 10);
@@ -32,8 +33,11 @@ const renderHeartBar = (score) => {
 };
 
 function App() {
-
-  const [score_barre, setScoreBarre] = useState(45);
+  
+  if (fiabilite_score > 100) {
+    fiabilite_score = 100
+  } else if (fiabilite_score < 0) { fiabilite_score = 0 }
+  const [score_barre, setScoreBarre] = useState(fiabilite_score);
 
   const [showTweet, setShowTweet] = useState(false);
 
