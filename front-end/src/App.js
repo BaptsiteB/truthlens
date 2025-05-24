@@ -1,8 +1,14 @@
 import './App.css';
 import React, { useState } from 'react';
+import Connexion from './Connexion'; // <-- IMPORT DE LA PAGE DE CONNEXION
 
+let fiabilite_score = 78;
 
-let fiabilite_score = -51
+if (fiabilite_score > 100) {
+  fiabilite_score = 100;
+} else if (fiabilite_score < 0) {
+  fiabilite_score = 0;
+}
 
 const renderHeartBar = (score) => {
   const fullHearts = Math.floor(score / 10);
@@ -18,44 +24,69 @@ const renderHeartBar = (score) => {
   const hearts = [];
 
   for (let i = 0; i < fullHearts; i++) {
-    hearts.push(<img key={`red-${i}`} src="/coeur_rouge.png" alt="coeur rouge" className="heart" />);
+    hearts.push(
+      <img
+        key={`red-${i}`}
+        src="/coeur_rouge.png"
+        alt="coeur rouge"
+        className="heart"
+      />
+    );
   }
 
   if (halfHeart) {
-    hearts.push(<img key="half" src="/coeur_demi.png" alt="coeur demi" className="heart" />);
+    hearts.push(
+      <img
+        key="half"
+        src="/coeur_demi.png"
+        alt="coeur demi"
+        className="heart"
+      />
+    );
   }
 
   for (let i = 0; i < blackHearts; i++) {
-    hearts.push(<img key={`black-${i}`} src="/coeur_noir.png" alt="coeur noir" className="heart" />);
+    hearts.push(
+      <img
+        key={`black-${i}`}
+        src="/coeur_noir.png"
+        alt="coeur noir"
+        className="heart"
+      />
+    );
   }
 
   return hearts;
 };
 
 function App() {
-  
-  if (fiabilite_score > 100) {
-    fiabilite_score = 100
-  } else if (fiabilite_score < 0) { fiabilite_score = 0 }
   const [score_barre, setScoreBarre] = useState(fiabilite_score);
-
   const [showTweet, setShowTweet] = useState(false);
+  const [page, setPage] = useState('accueil'); // <-- AJOUT POUR LA NAVIGATION
 
   const handleAnalyzeClick = () => {
-    setShowTweet(true); // simulation de réponse
+    setShowTweet(true); // simulation
   };
+
+  if (page === 'connexion') {
+    return <Connexion />;
+  }
 
   return (
     <div className="app">
       <header className="navbar">
         <div className="logo-title">
-          <img src="/truthlens_logo.png" alt="Truth Lens Logo" className="logo" />
+          <img
+            src="/truthlens_logo.png"
+            alt="Truth Lens Logo"
+            className="logo"
+          />
           <h3>Truth Lens</h3>
         </div>
         <nav className="nav-links">
-          <a href="#">Accueil</a>
+          <a href="#" onClick={() => setPage('accueil')}>Accueil</a>
           <a href="#">Mon profil</a>
-          <a href="#">Se connecter</a>
+          <a href="#" onClick={() => setPage('connexion')}>Se connecter</a>
         </nav>
       </header>
 
@@ -78,7 +109,9 @@ function App() {
           <>
             <div className="tweet-card">
               <div className="tweet-header">
-                <span className="tweet-author">Emily <span className="tweet-emoji">🦋</span></span>
+                <span className="tweet-author">
+                  Emily <span className="tweet-emoji">🦋</span>
+                </span>
                 <span className="tweet-username">@emilyliu.me</span>
               </div>
               <div className="tweet-content">
@@ -91,13 +124,10 @@ function App() {
 
             <div className="reliability">
               <h2>Fiabilité : {score_barre}%</h2>
-              <div className="heart-bar">
-                {renderHeartBar(score_barre)}
-              </div>
+              <div className="heart-bar">{renderHeartBar(score_barre)}</div>
             </div>
           </>
         )}
-        
       </main>
     </div>
   );
