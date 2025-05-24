@@ -1,7 +1,13 @@
 import './Connexion.css';
 import React, { useState } from 'react';
+import Inscription from './Inscription';
 
-function App() {
+function Connexion() {
+  const [page, setPage] = useState('connexion');
+
+  if (page === 'inscription') {
+    return <Inscription />;
+  }
 
   return (
     <div className="app">
@@ -18,32 +24,38 @@ function App() {
       </header>
 
       <main className="main-content">
+        <h1>Connectez-vous à</h1>
         <h1>
-          Connectez vous à 
-        </h1>
-        <h1>
-          <span className="triforce-font">Truth Lens</span> 
+          <span className="triforce-font">Truth Lens</span>
         </h1>
       </main>
-      
-        <div className="connexion-container">
-            <form className="connexion-form">
-                <label>
-                    Email :
-                    <input type="email" name="email" required />
-                </label>
-                <label>
-                    Mot de passe :
-                    <input type="password" name="password" required />
-                </label>
-                <button type="submit">Se connecter</button>
-            </form>
-        </div>
-    </div>
 
-    
+      <div className="connexion-container">
+        <form className="connexion-form">
+          <label>
+            Email :
+            <input type="email" name="email" required />
+          </label>
+          <label>
+            Mot de passe :
+            <input type="password" name="password" required />
+          </label>
+          <button type="submit">Se connecter</button>
+        </form>
+      </div>
+
+      <div className="inscription-container">
+        <span className="inscription-label">Pas encore de compte ?</span>
+        <a
+          href="#"
+          className="inscription-link"
+          onClick={() => setPage('inscription')}
+        >
+          Inscrivez-vous !
+        </a>
+      </div>
+    </div>
   );
-  
 }
 
-export default App;
+export default Connexion;
