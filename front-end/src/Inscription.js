@@ -1,14 +1,18 @@
 import './Inscription.css';
 import React, { useState } from 'react';
 import Connexion from './Connexion';
+import App from './App';
 
 function Inscription() {
 
   const [page, setPage] = useState('inscription');
 
-  // Si on clique sur "Connectez-vous", on affiche la page de connection
   if (page === 'connexion') {
     return <Connexion />;
+  }
+
+  if (page === 'app') {
+    return <App />;
   }
 
   return (
@@ -19,9 +23,9 @@ function Inscription() {
           <h3>Truth Lens</h3>
         </div>
         <nav className="nav-links">
-          <a href="#">Accueil</a>
+          <a href="#" onClick={() => setPage('app')} >Accueil</a>
           <a href="#">Mon profil</a>
-          <a href="#">Se connecter</a>
+          <a href="#"onClick={() => setPage('connexion')} >Se connecter</a>
         </nav>
       </header>
 
@@ -45,15 +49,19 @@ function Inscription() {
                 <button type="submit">Créer un compte</button>
             </form>
         </div>
-          <p style={{ marginTop: '20px', textAlign: 'center' }}>
-            Vous possédez déjà un compte ?{' '}
-            <a href="#" onClick={() => setPage('connexion')}>Connectez-vous !</a>
-          </p>
-    </div>
 
-    
+        <div className="inscription-connexion-container">
+          <span className="inscription-connexion-label">Vous possédez déjà un compte ?</span>
+          <a
+            href="#"
+            className="inscription-connexion-link"
+            onClick={() => setPage('connexion')}
+          >
+            Connectez vous !
+          </a>
+        </div>
+    </div>
   );
-  
 }
 
 export default Inscription;

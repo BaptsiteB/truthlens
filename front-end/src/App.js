@@ -1,8 +1,8 @@
 import './App.css';
 import React, { useState } from 'react';
-import Connexion from './Connexion'; // <-- IMPORT DE LA PAGE DE CONNEXION
+import Connexion from './Connexion';
 
-let fiabilite_score = 78;
+let fiabilite_score = 20;
 
 if (fiabilite_score > 100) {
   fiabilite_score = 100;

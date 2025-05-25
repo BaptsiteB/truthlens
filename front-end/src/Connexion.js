@@ -1,12 +1,19 @@
 import './Connexion.css';
 import React, { useState } from 'react';
 import Inscription from './Inscription';
+import App from './App';
 
 function Connexion() {
+
   const [page, setPage] = useState('connexion');
+  
 
   if (page === 'inscription') {
     return <Inscription />;
+  }
+
+    if (page === 'app') {
+    return <App />;
   }
 
   return (
@@ -17,8 +24,8 @@ function Connexion() {
           <h3>Truth Lens</h3>
         </div>
         <nav className="nav-links">
-          <a href="#">Accueil</a>
-          <a href="#">Mon profil</a>
+          <a href="#" onClick={() => setPage('app')} >Accueil</a>
+          <a href="#" >Mon profil</a>
           <a href="#">Se connecter</a>
         </nav>
       </header>
@@ -44,11 +51,11 @@ function Connexion() {
         </form>
       </div>
 
-      <div className="inscription-container">
+      <div className="connexion-inscription-container">
         <span className="inscription-label">Pas encore de compte ?</span>
         <a
           href="#"
-          className="inscription-link"
+          className="connexion-inscription-link"
           onClick={() => setPage('inscription')}
         >
           Inscrivez-vous !
