@@ -2,6 +2,7 @@ import './Connexion.css';
 import React, { useState } from 'react';
 import Inscription from './Inscription';
 import App from './App';
+import Profil from './Profil';
 
 function Connexion() {
 
@@ -16,6 +17,10 @@ function Connexion() {
     return <App />;
   }
 
+  if (page === 'profil') {
+    return <Profil />;
+  }
+
   return (
     <div className="app">
       <header className="navbar">
@@ -25,7 +30,7 @@ function Connexion() {
         </div>
         <nav className="nav-links">
           <a href="#" onClick={() => setPage('app')} >Accueil</a>
-          <a href="#" >Mon profil</a>
+          <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
           <a href="#">Se connecter</a>
         </nav>
       </header>

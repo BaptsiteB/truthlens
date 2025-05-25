@@ -2,6 +2,7 @@ import './Inscription.css';
 import React, { useState } from 'react';
 import Connexion from './Connexion';
 import App from './App';
+import Profil from './Profil';
 
 function Inscription() {
 
@@ -15,6 +16,10 @@ function Inscription() {
     return <App />;
   }
 
+  if (page === 'profil') {
+    return <Profil />;
+  }
+
   return (
     <div className="app">
       <header className="navbar">
@@ -24,7 +29,7 @@ function Inscription() {
         </div>
         <nav className="nav-links">
           <a href="#" onClick={() => setPage('app')} >Accueil</a>
-          <a href="#">Mon profil</a>
+          <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
           <a href="#"onClick={() => setPage('connexion')} >Se connecter</a>
         </nav>
       </header>

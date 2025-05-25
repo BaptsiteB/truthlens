@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 import Connexion from './Connexion';
+import Profil from './Profil';
 
 let fiabilite_score = 20;
 
@@ -62,7 +63,7 @@ const renderHeartBar = (score) => {
 function App() {
   const [score_barre, setScoreBarre] = useState(fiabilite_score);
   const [showTweet, setShowTweet] = useState(false);
-  const [page, setPage] = useState('accueil'); // <-- AJOUT POUR LA NAVIGATION
+  const [page, setPage] = useState('app');
 
   const handleAnalyzeClick = () => {
     setShowTweet(true); // simulation
@@ -70,6 +71,10 @@ function App() {
 
   if (page === 'connexion') {
     return <Connexion />;
+  }
+
+  if (page === 'profil') {
+    return <Profil />;
   }
 
   return (
@@ -85,7 +90,7 @@ function App() {
         </div>
         <nav className="nav-links">
           <a href="#" onClick={() => setPage('accueil')}>Accueil</a>
-          <a href="#">Mon profil</a>
+          <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
           <a href="#" onClick={() => setPage('connexion')}>Se connecter</a>
         </nav>
       </header>
