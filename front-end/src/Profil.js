@@ -4,8 +4,80 @@ import App from './App';
 import Connexion from './Connexion';
 
 function Profil() {
-
   const [page, setPage] = useState('profil');
+
+  // Données simulées (ex: récupérées côté backend normalement)
+  const tweetsAnalyses = [
+    {
+      id: 1,
+      contenu: "there are three movies explaining what happens at night to the museums",
+      auteur: "trin",
+      date: "1:42 AM · Mar 11, 2021",
+      handle: "@loveltrin"
+    },
+    {
+      id: 2,
+      contenu: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod...",
+      auteur: "Your Name",
+      date: "1:42 AM · Mar 11, 2021",
+      handle: "@UserNameHere"
+    },
+    {
+      id: 3,
+      contenu: "logging on for my shift at the posting factory",
+      auteur: "Emily 🦋",
+      date: "Jul 3, 2023 at 11:11 AM",
+      handle: "@emilyliu.me"
+    },
+    {
+      id: 4,
+      contenu: "another example tweet for testing row wrapping",
+      auteur: "Tester",
+      date: "Feb 5, 2024",
+      handle: "@tester"
+    },
+    {
+      id: 5,
+      contenu: "fifth tweet showing correct layout",
+      auteur: "LayoutBot",
+      date: "Apr 1, 2024",
+      handle: "@layoutbot"
+    },
+        {
+      id: 6,
+      contenu: "test 6",
+      auteur: "LayoutBot",
+      date: "Apr 1, 2024",
+      handle: "@layoutbot"
+    }, 
+        {
+      id: 7,
+      contenu: "test 7",
+      auteur: "LayoutBot",
+      date: "Apr 1, 2024",
+      handle: "@layoutbot"
+    }, 
+        {
+      id: 8,
+      contenu: "test 8",
+      auteur: "LayoutBot",
+      date: "Apr 1, 2024",
+      handle: "@layoutbot"
+    },     {
+      id: 9,
+      contenu: "test 9",
+      auteur: "LayoutBot",
+      date: "Apr 1, 2024",
+      handle: "@layoutbot"
+    }, 
+        {
+      id: 10,
+      contenu: "test 10",
+      auteur: "LayoutBot",
+      date: "Apr 1, 2024",
+      handle: "@layoutbot"
+    }
+  ];
 
   if (page === 'connexion') {
     return <Connexion />;
@@ -14,6 +86,7 @@ function Profil() {
   if (page === 'app') {
     return <App />;
   }
+
   return (
     <div className="app">
       <header className="navbar">
@@ -23,7 +96,7 @@ function Profil() {
         </div>
         <nav className="nav-links">
           <a href="#" onClick={() => setPage('app')} >Accueil</a>
-          <a href="#" >Mon profil</a>
+          <a href="#">Mon profil</a>
           <a href="#" onClick={() => setPage('connexion')} >Se connecter</a>
         </nav>
       </header>
@@ -33,16 +106,25 @@ function Profil() {
         <h1>
           <span className="triforce-font">Truth Lens</span>
         </h1>
+
         <div className="Informations-Utilisateur">
           <h2>Mes informations</h2>
-          <label>Nom d'Utilisateur : </label> <br/>
-          <label>Email : </label>
+          <label>Nom d'Utilisateur :</label><br />
+          <label>Email :</label>
         </div>
-        
-        <br/><br/><br/><br/><br/>
-        
+
         <div className="Historique-analyses">
           <h2>Historique des analyses</h2>
+          <div className="tweet-grid">
+            {tweetsAnalyses.map((tweet) => (
+              <div key={tweet.id} className="tweet-card">
+                <strong>{tweet.auteur}</strong><br />
+                <span className="tweet-handle">{tweet.handle}</span>
+                <p>{tweet.contenu}</p>
+                <span className="tweet-date">{tweet.date}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     </div>

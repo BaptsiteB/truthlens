@@ -92,6 +92,7 @@ h3 {
 .Informations-Utilisateur{
   text-align: left;
   margin-left: 50px;
+  
 }
 
 .Informations-Utilisateur h2{
@@ -109,4 +110,35 @@ h3 {
 
 .Historique-analyses h2{
   font-size: 30px;
+}
+
+.tweet-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  padding: 0 50px;
+  margin-top: 30px;
+}
+
+.tweet-card {
+  background-color: white;
+  color: black;
+  padding: 15px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-family: Arial, sans-serif;
+}
+
+.tweet-handle {
+  color: #555;
+  font-size: 0.9em;
+}
+
+.tweet-date {
+  font-size: 0.8em;
+  color: gray;
+  display: block;
+  margin-top: 10px;
 }
