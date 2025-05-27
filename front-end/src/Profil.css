@@ -88,3 +88,25 @@ h3 {
   margin: 0;
   font-family: 'Triforce', serif;
 }
+
+.Informations-Utilisateur{
+  text-align: left;
+  margin-left: 50px;
+}
+
+.Informations-Utilisateur h2{
+  font-size: 30px;
+}
+
+.Informations-Utilisateur label{
+  font-size: 20px;
+}
+
+.Historique-analyses h2{
+  text-align: left;
+  margin-left: 50px;
+}
+
+.Historique-analyses h2{
+  font-size: 30px;
+}

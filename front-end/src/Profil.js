@@ -27,6 +27,24 @@ function Profil() {
           <a href="#" onClick={() => setPage('connexion')} >Se connecter</a>
         </nav>
       </header>
+
+      <main className="main-content">
+        <h1>Mon Profil</h1>
+        <h1>
+          <span className="triforce-font">Truth Lens</span>
+        </h1>
+        <div className="Informations-Utilisateur">
+          <h2>Mes informations</h2>
+          <label>Nom d'Utilisateur : </label> <br/>
+          <label>Email : </label>
+        </div>
+        
+        <br/><br/><br/><br/><br/>
+        
+        <div className="Historique-analyses">
+          <h2>Historique des analyses</h2>
+        </div>
+      </main>
     </div>
   );
 }
