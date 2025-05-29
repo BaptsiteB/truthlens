@@ -131,6 +131,15 @@ function App() {
               <h2>Fiabilité : {score_barre}%</h2>
               <div className="heart-bar">{renderHeartBar(score_barre)}</div>
             </div>
+
+            <div className="emotion-box">
+              <h2 className="emotion-title">Émotions engendrées</h2>
+              <ul className="emotion-list">
+                <li><span className="emoji">🤣</span> Humour</li>
+                <li><span className="emoji">😲</span> Surprise</li>
+                <li><span className="emoji">😎</span> Tranquillité</li>
+              </ul>
+            </div>
           </>
         )}
       </main>
