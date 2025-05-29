@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Connexion from './Connexion';
 import Profil from './Profil';
 
@@ -60,10 +60,63 @@ const renderHeartBar = (score) => {
   return hearts;
 };
 
+
+const FallingLetters = ({ words }) => {
+  const [instances, setInstances] = useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const word = words[Math.floor(Math.random() * words.length)];
+      const id = Date.now() + Math.random();
+
+      let x;
+      let attempts = 0;
+      const minDistance = 8; // écart minimum entre deux colonnes (%)
+
+      do {
+        x = Math.random() * 90; // évite d'aller au bord droit
+        attempts++;
+        if (attempts > 20) break; // évite boucle infinie
+      } while (
+        instances.some(inst => Math.abs(inst.x - x) < minDistance)
+      );
+
+      setInstances(prev => [...prev, { word, x, id }]);
+
+      // Clean up après 12s
+      setTimeout(() => {
+        setInstances(prev => prev.filter(item => item.id !== id));
+      }, 12000);
+    }, 600);
+
+    return () => clearInterval(interval);
+  }, [words, instances]);
+
+  return (
+    <div className="falling-container">
+      {instances.map(({ word, x, id }) => (
+        <div key={id} className="falling-word" style={{ left: `${x}%` }}>
+          {word.split('').map((char, i) => (
+            <img
+              key={i}
+              src={`/Lettres/${char.toLowerCase()}.png`}
+              alt={char}
+              className="falling-letter"
+              style={{ animationDelay: `${i * 0.3}s` }}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
 function App() {
   const [score_barre, setScoreBarre] = useState(fiabilite_score);
   const [showTweet, setShowTweet] = useState(false);
   const [page, setPage] = useState('app');
+  const words = ['estebanmartel', 'baptistebilla', 'viveladata', 'projettruthlens'];
 
   const handleAnalyzeClick = () => {
     setShowTweet(true); // simulation
@@ -87,6 +140,7 @@ function App() {
             className="logo"
           />
           <h3>Truth Lens</h3>
+          <FallingLetters words={words} />
         </div>
         <nav className="nav-links">
           <a href="#" onClick={() => setPage('accueil')}>Accueil</a>
