@@ -73,6 +73,9 @@ def extraire_json_de_reponse(reponse_brute_gemini: str) -> dict | None:
         print("Erreur : L'entrée pour extraire_json_de_reponse doit être une chaîne de caractères.")
         return None
 
+    # Avant de parser, retire la dernière virgule avant la fermeture }
+    reponse_brute_gemini = re.sub(r',\\s*}', '}', reponse_brute_gemini)
+
     # 1. Chercher un bloc JSON marqué par ```json ... ```
     match_json_block = re.search(r"```json\s*(\{[\s\S]*?\})\s*```", reponse_brute_gemini)
     if match_json_block:
@@ -115,6 +118,22 @@ def extraire_json_de_reponse(reponse_brute_gemini: str) -> dict | None:
         print(f"Erreur inattendue lors de l'extraction du JSON brut : {ex}")
 
     return None
+
+def appeler_gemini_freeform(prompt: str) -> str:
+    """
+    Envoie un prompt libre à Gemini et retourne la réponse brute (texte).
+    """
+    load_dotenv()
+    api_key = os.getenv("API_KEY")
+    if not api_key:
+        return "Erreur : Clé API GOOGLE_API_KEY non trouvée dans le fichier .env."
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        return f"Une erreur est survenue lors de l'appel à Gemini : {e}"
 
 # --- Exemple d'utilisation ---
 if __name__ == "__main__":
