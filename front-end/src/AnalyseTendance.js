@@ -141,7 +141,7 @@ function AnalyseTendance() {
   
 
   return (
-    <div className="analysetendance">
+    <div className="app">
       <header className="navbar">
         <div className="logo-title">
           <img
@@ -169,7 +169,7 @@ function AnalyseTendance() {
 
         <input
           type="text"
-          placeholder="Insérez le lien d'un tweet"
+          placeholder="Insérez le lien d'un post Bluesky"
           className="tweet-input"
         />
         <button className="analyze-button" onClick={handleAnalyzeClick}>

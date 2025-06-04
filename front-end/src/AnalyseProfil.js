@@ -5,64 +5,6 @@ import Profil from './Profil';
 import AnalyseTendance from './AnalyseTendance';
 import App from './App';
 
-let fiabilite_score = 20;
-
-if (fiabilite_score > 100) {
-  fiabilite_score = 100;
-} else if (fiabilite_score < 0) {
-  fiabilite_score = 0;
-}
-
-const renderHeartBar = (score) => {
-  const fullHearts = Math.floor(score / 10);
-  const remainder = score % 10;
-
-  let halfHeart = 0;
-  if (remainder >= 5) {
-    halfHeart = 1;
-  }
-
-  const blackHearts = 10 - fullHearts - halfHeart;
-
-  const hearts = [];
-
-  for (let i = 0; i < fullHearts; i++) {
-    hearts.push(
-      <img
-        key={`red-${i}`}
-        src="/coeur_rouge.png"
-        alt="coeur rouge"
-        className="heart"
-      />
-    );
-  }
-
-  if (halfHeart) {
-    hearts.push(
-      <img
-        key="half"
-        src="/coeur_demi.png"
-        alt="coeur demi"
-        className="heart"
-      />
-    );
-  }
-
-  for (let i = 0; i < blackHearts; i++) {
-    hearts.push(
-      <img
-        key={`black-${i}`}
-        src="/coeur_noir.png"
-        alt="coeur noir"
-        className="heart"
-      />
-    );
-  }
-
-  return hearts;
-};
-
-
 const FallingLetters = ({ words }) => {
   const [instances, setInstances] = useState([]);
 
@@ -115,7 +57,6 @@ const FallingLetters = ({ words }) => {
 
 
 function AnalyseProfil() {
-  const [score_barre, setScoreBarre] = useState(fiabilite_score);
   const [showTweet, setShowTweet] = useState(false);
   const [page, setPage] = useState('analyseprofil');
   const words = ['estebanmartel', 'baptistebilla', 'viveladata', 'projettruthlens'];
@@ -141,7 +82,7 @@ function AnalyseProfil() {
   }
 
   return (
-    <div className="analyseprofil">
+    <div className="app">
       <header className="navbar">
         <div className="logo-title">
           <img
@@ -162,14 +103,14 @@ function AnalyseProfil() {
       </header>
 
       <main className="main-content">
+        <h1>Analysez un profil Bluesky avec</h1>
         <h1>
-          Bienvenue sur <span className="triforce-font">Truth Lens</span>
+          <span className="triforce-font">Truth Lens</span>
         </h1>
-        <h2>Analyse Profil</h2>
 
         <input
           type="text"
-          placeholder="Insérez le lien d'un tweet"
+          placeholder="Insérez le lien d'un profil Bluesky"
           className="tweet-input"
         />
         <button className="analyze-button" onClick={handleAnalyzeClick}>
@@ -178,37 +119,34 @@ function AnalyseProfil() {
 
         {showTweet && (
           <>
-            <div className="tweet-card">
-              <div className="tweet-header">
-                <span className="tweet-author">
-                  Emily <span className="tweet-emoji">🦋</span>
-                </span>
-                <span className="tweet-username">@emilyliu.me</span>
-              </div>
-              <div className="tweet-content">
-                logging on for my shift at the posting factory
-              </div>
-              <div className="tweet-date">
-                Jul 3, 2023 at 11:11 AM
-              </div>
+            <div className="reliability-profil">
+              <h2>Nombre de posts analysés : 50</h2>
+              <h2>Moyenne de fausses informations : 21</h2>
+              <h2>Proportions de posts politiques : 36%</h2>
+              <h2>Proportions de posts factuels : 55%</h2>
             </div>
 
-            <div className="reliability">
-              <h2>Fiabilité : {score_barre}%</h2>
-              <div className="heart-bar">{renderHeartBar(score_barre)}</div>
-            </div>
-
-            <div className="emotion-box">
-              <h2 className="emotion-title">Émotions engendrées</h2>
-              <ul className="emotion-list">
+            <div className="emotion-profil-box">
+              <h2 className="emotion-profil-title">Émotions véhiculées les plus communes</h2>
+              <ul className="emotion-profil-list">
                 <li><span className="emoji">🤣</span> Humour</li>
                 <li><span className="emoji">😲</span> Surprise</li>
                 <li><span className="emoji">😎</span> Tranquillité</li>
               </ul>
             </div>
+
+            <div className="tweet-card">
+              <div className="tweet-header">
+                  Résumé du profil <span className="tweet-emoji">🔎</span>
+              </div>
+              <div className="tweet-content">
+                This Bluesky account exhibits a blend of technological, political, and economic commentary, with a significant focus on the impact of AI and blockchain technology.  It's not strictly personal, but the author's opinions and experiences are woven throughout.\n\n**Recurring Themes and Keywords:**\n\n* **AI and its impact:** The author frequently discusses the transformative potential of AI, covering topics like AI-assisted writing, patent applications, job displacement, and its educational applications for children. Keywords include \"AI,\" \"ChatGPT,\" \"Gemini,\" \"prompt engineering,\"  \"critical thinking.\"\n* **Blockchain technology:**  The account advocates for blockchain's uses in database management and security, contrasting it with traditional database systems.  Keywords include \"blockchain,\" \"database,\" \"security,\" \"crypto.\"\n* **Political commentary:**  The account touches upon US politics, including discussions of Republican policies, ICE actions, and the impact of tariffs. Keywords include \"ICE,\" \"Republicans,\" \"Trump,\" \"tariffs.\"\n* **Economic analysis:** The author comments on economic trends, including the impact of AI on employment,  the shrinking US economy, and the effects of government policies. Keywords include \"economy,\" \"jobs,\" \"layoffs,\" \"tariffs.\"\n\n**Overall:** The account presents a perspective informed by technological expertise and a critical view of current political and economic events. The author frequently shares news articles and links, demonstrating an interest in staying updated on current affairs and disseminating information.
+              </div>
+            </div>
           </>
         )}
       </main>
+      <br></br><br></br><br></br>
     </div>
   );
 }
