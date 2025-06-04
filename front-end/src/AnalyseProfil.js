@@ -2,6 +2,8 @@ import './AnalyseProfil.css';
 import React, { useState, useEffect } from 'react';
 import Connexion from './Connexion';
 import Profil from './Profil';
+import AnalyseTendance from './AnalyseTendance';
+import App from './App';
 
 let fiabilite_score = 20;
 
@@ -112,10 +114,10 @@ const FallingLetters = ({ words }) => {
 };
 
 
-function App() {
+function AnalyseProfil() {
   const [score_barre, setScoreBarre] = useState(fiabilite_score);
   const [showTweet, setShowTweet] = useState(false);
-  const [page, setPage] = useState('app');
+  const [page, setPage] = useState('analyseprofil');
   const words = ['estebanmartel', 'baptistebilla', 'viveladata', 'projettruthlens'];
 
   const handleAnalyzeClick = () => {
@@ -130,8 +132,16 @@ function App() {
     return <Profil />;
   }
 
+    if (page === 'analysetendance') {
+    return <AnalyseTendance />;
+  }
+
+  if (page === 'app') {
+    return <App />;
+  }
+
   return (
-    <div className="app">
+    <div className="analyseprofil">
       <header className="navbar">
         <div className="logo-title">
           <img
@@ -143,9 +153,9 @@ function App() {
           <FallingLetters words={words} />
         </div>
         <nav className="nav-links">
-          <a href="#" onClick={() => setPage('accueil')}>Posts</a>
-          <a href="#" onClick={() => setPage('accueil')}>Profils</a>
-          <a href="#" onClick={() => setPage('accueil')}>Tendances</a>
+          <a href="#" onClick={() => setPage('app')}>Posts</a>
+          <a href="#" onClick={() => setPage('analyseprofil')}>Profils</a>
+          <a href="#" onClick={() => setPage('analysetendance')}>Tendances</a>
           <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
           <a href="#" onClick={() => setPage('connexion')}>Se connecter</a>
         </nav>
@@ -155,7 +165,7 @@ function App() {
         <h1>
           Bienvenue sur <span className="triforce-font">Truth Lens</span>
         </h1>
-        <h2>Le meilleur site pour analyser la véracité d'un tweet</h2>
+        <h2>Analyse Profil</h2>
 
         <input
           type="text"
@@ -203,4 +213,4 @@ function App() {
   );
 }
 
-export default App;
+export default AnalyseProfil;

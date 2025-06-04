@@ -2,7 +2,8 @@ import './Profil.css';
 import React, { useState, useEffect } from 'react';
 import App from './App';
 import Connexion from './Connexion';
-
+import AnalyseProfil from './AnalyseProfil';
+import AnalyseTendance from './AnalyseTendance';
 
 const FallingLetters = ({ words }) => {
   const [instances, setInstances] = useState([]);
@@ -141,6 +142,15 @@ function Profil() {
     return <App />;
   }
 
+    if (page === 'analysetendance') {
+    return <AnalyseTendance />;
+  }
+
+    if (page === 'analyseprofil') {
+    return <AnalyseProfil />;
+  }
+
+
   return (
     <div className="app">
       <header className="navbar">
@@ -150,9 +160,11 @@ function Profil() {
           <FallingLetters words={words} />
     </div>
         <nav className="nav-links">
-          <a href="#" onClick={() => setPage('app')} >Accueil</a>
-          <a href="#">Mon profil</a>
-          <a href="#" onClick={() => setPage('connexion')} >Se connecter</a>
+          <a href="#" onClick={() => setPage('app')}>Posts</a>
+          <a href="#" onClick={() => setPage('analyseprofil')}>Profils</a>
+          <a href="#" onClick={() => setPage('analysetendance')}>Tendances</a>
+          <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
+          <a href="#" onClick={() => setPage('connexion')}>Se connecter</a>
         </nav>
       </header>
 

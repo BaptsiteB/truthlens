@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Inscription from './Inscription';
 import App from './App';
 import Profil from './Profil';
+import AnalyseProfil from './AnalyseProfil';
+import AnalyseTendance from './AnalyseTendance';
 
 
 const FallingLetters = ({ words }) => {
@@ -75,6 +77,14 @@ function Connexion() {
     return <Profil />;
   }
 
+    if (page === 'analysetendance') {
+    return <AnalyseTendance />;
+  }
+
+    if (page === 'analyseprofil') {
+    return <AnalyseProfil />;
+  }
+
   return (
     <div className="app">
       <header className="navbar">
@@ -84,9 +94,11 @@ function Connexion() {
         <FallingLetters words={words} />
     </div>
         <nav className="nav-links">
-          <a href="#" onClick={() => setPage('app')} >Accueil</a>
+          <a href="#" onClick={() => setPage('app')}>Posts</a>
+          <a href="#" onClick={() => setPage('analyseprofil')}>Profils</a>
+          <a href="#" onClick={() => setPage('analysetendance')}>Tendances</a>
           <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
-          <a href="#">Se connecter</a>
+          <a href="#" onClick={() => setPage('connexion')}>Se connecter</a>
         </nav>
       </header>
 

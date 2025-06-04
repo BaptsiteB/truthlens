@@ -2,6 +2,8 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import Connexion from './Connexion';
 import Profil from './Profil';
+import AnalyseProfil from './AnalyseProfil';
+import AnalyseTendance from './AnalyseTendance';
 
 let fiabilite_score = 20;
 
@@ -130,6 +132,14 @@ function App() {
     return <Profil />;
   }
 
+  if (page === 'analyseprofil') {
+    return <AnalyseProfil />;
+  }
+
+  if (page === 'analysetendance') {
+    return <AnalyseTendance />;
+  }
+
   return (
     <div className="app">
       <header className="navbar">
@@ -143,7 +153,9 @@ function App() {
           <FallingLetters words={words} />
         </div>
         <nav className="nav-links">
-          <a href="#" onClick={() => setPage('accueil')}>Accueil</a>
+          <a href="#" onClick={() => setPage('accueil')}>Posts</a>
+          <a href="#" onClick={() => setPage('analyseprofil')}>Profils</a>
+          <a href="#" onClick={() => setPage('analysetendance')}>Tendances</a>
           <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
           <a href="#" onClick={() => setPage('connexion')}>Se connecter</a>
         </nav>
