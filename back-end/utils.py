@@ -76,19 +76,24 @@ def get_bluesky_post_info(post_url: str):
             return None
         handle = path_parts[1]
         rkey = path_parts[3]
-        collection = "app.bsky.feed.post"
-        resolve_handle_url = "https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle"
-        params_resolve = {'handle': handle}
-        response_resolve = requests.get(resolve_handle_url, params=params_resolve, timeout=10)
-        response_resolve.raise_for_status()
-        did = response_resolve.json().get('did')
-        if not did:
-            return None
-        get_record_url = "https://public.api.bsky.app/xrpc/com.atproto.repo.getRecord"
-        params_record = {'repo': did, 'collection': collection, 'rkey': rkey}
-        response_record = requests.get(get_record_url, params=params_record, timeout=10)
-        response_record.raise_for_status()
-        return response_record.json()
+        
+        client = Client()
+        
+        profile = client.get_profile(actor=handle)
+
+        uri = f"at://{profile.did}/app.bsky.feed.post/{rkey}"
+        response = client.get_post(post=uri)
+        
+        post_record = json.loads(response.post.model_dump_json())
+
+        return {
+            "post": post_record,
+            "author": {
+                "handle": profile.handle,
+                "displayName": profile.display_name,
+                "did": profile.did
+            }
+        }
     except Exception as e:
         print(f"An error occurred in get_bluesky_post_info: {e}")
         return None

@@ -1,5 +1,6 @@
 import './AnalyseTendance.css';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Connexion from './Connexion';
 import Profil from './Profil';
 import AnalyseProfil from './AnalyseProfil';
@@ -114,14 +115,52 @@ const FallingLetters = ({ words }) => {
 };
 
 
+const TypingText = ({ text, speed = 20 }) => { 
+  const [displayedText, setDisplayedText] = useState('');
+
+  useEffect(() => {
+    setDisplayedText(''); 
+    if (text) {
+      let i = 0;
+      const typingInterval = setInterval(() => {
+        if (i < text.length) {
+          setDisplayedText(prevText => prevText + text.charAt(i));
+          i++;
+        } else {
+          clearInterval(typingInterval);
+        }
+      }, speed);
+      return () => clearInterval(typingInterval); 
+    }
+  }, [text, speed]); 
+
+  return <div style={{ whiteSpace: 'pre-wrap' }}>{displayedText}</div>;
+};
+
+
 function AnalyseTendance() {
-  const [score_barre, setScoreBarre] = useState(fiabilite_score);
-  const [showTweet, setShowTweet] = useState(false);
+  const [showResult, setShowResult] = useState(false);
   const [page, setPage] = useState('analysetendance');
   const words = ['estebanmartel', 'baptistebilla', 'viveladata', 'projettruthlens'];
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleAnalyzeClick = () => {
-    setShowTweet(true); // simulation
+  const handleAnalyzeClick = async () => {
+    setLoading(true);
+    setError(null);
+    setAnalysisResult(null);
+    setShowResult(false);
+
+    try {
+      const response = await axios.get('http://localhost:5000/vet/trend');
+      setAnalysisResult(response.data);
+      setShowResult(true);
+    } catch (err) {
+      setError(err.response ? err.response.data.error : "Une erreur s'est produite");
+      setShowResult(false);
+    }
+    setLoading(false);
   };
 
   if (page === 'app') {
@@ -163,48 +202,25 @@ function AnalyseTendance() {
 
       <main className="main-content">
         <h1>
-          Bienvenue sur <span className="triforce-font">Truth Lens</span>
+          Analyse des tendances sur <span className="triforce-font">Truth Lens</span>
         </h1>
-        <h2>Analyse Tendance</h2>
+        <h2>Cliquez sur le bouton pour découvrir les sujets populaires sur Bluesky</h2>
 
-        <input
-          type="text"
-          placeholder="Insérez le lien d'un post Bluesky"
-          className="tweet-input"
-        />
-        <button className="analyze-button" onClick={handleAnalyzeClick}>
-          Analyser
+        <button className="analyze-button" onClick={handleAnalyzeClick} disabled={loading}>
+          {loading ? 'Analyse en cours...' : 'Analyser les tendances'}
         </button>
 
-        {showTweet && (
+        {error && <div className="error-message">{error}</div>}
+
+        {showResult && analysisResult && (
           <>
             <div className="tweet-card">
               <div className="tweet-header">
-                <span className="tweet-author">
-                  Emily <span className="tweet-emoji">🦋</span>
-                </span>
-                <span className="tweet-username">@emilyliu.me</span>
+                Analyse des tendances <span className="tweet-emoji">📈</span>
               </div>
               <div className="tweet-content">
-                logging on for my shift at the posting factory
+                <TypingText text={analysisResult.analyse_brute} speed={5} />
               </div>
-              <div className="tweet-date">
-                Jul 3, 2023 at 11:11 AM
-              </div>
-            </div>
-
-            <div className="reliability">
-              <h2>Fiabilité : {score_barre}%</h2>
-              <div className="heart-bar">{renderHeartBar(score_barre)}</div>
-            </div>
-
-            <div className="emotion-box">
-              <h2 className="emotion-title">Émotions engendrées</h2>
-              <ul className="emotion-list">
-                <li><span className="emoji">🤣</span> Humour</li>
-                <li><span className="emoji">😲</span> Surprise</li>
-                <li><span className="emoji">😎</span> Tranquillité</li>
-              </ul>
             </div>
           </>
         )}

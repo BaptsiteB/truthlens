@@ -1,5 +1,6 @@
 import './AnalyseProfil.css';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Connexion from './Connexion';
 import Profil from './Profil';
 import AnalyseTendance from './AnalyseTendance';
@@ -81,16 +82,33 @@ const TypingText = ({ text, speed = 20 }) => { // speed en millisecondes, 20ms p
 
 
 function AnalyseProfil() {
-  const [showTweet, setShowTweet] = useState(false);
+  const [showResult, setShowResult] = useState(false);
   const [page, setPage] = useState('analyseprofil');
   const words = ['estebanmartel', 'baptistebilla', 'viveladata', 'projettruthlens'];
+  const [accountHandle, setAccountHandle] = useState('');
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleAnalyzeClick = () => {
-    setShowTweet(true); // simulation
+  const handleAnalyzeClick = async () => {
+    setLoading(true);
+    setError(null);
+    setAnalysisResult(null);
+    setShowResult(false);
+
+    try {
+      const response = await axios.post('http://localhost:5000/vet/account', { account_handle: accountHandle });
+      setAnalysisResult(response.data);
+      setShowResult(true);
+    } catch (err) {
+      setError(err.response ? err.response.data.error : "Une erreur s'est produite");
+      setShowResult(false);
+    }
+    setLoading(false);
   };
 
   // Contenu textuel pour l'animation
-  const tweetSummaryContent = `This Bluesky account exhibits a blend of technological, political, and economic commentary, with a significant focus on the impact of AI and blockchain technology.  It's not strictly personal, but the author's opinions and experiences are woven throughout.\n\n**Recurring Themes and Keywords:**\n\n* **AI and its impact:** The author frequently discusses the transformative potential of AI, covering topics like AI-assisted writing, patent applications, job displacement, and its educational applications for children. Keywords include "AI," "ChatGPT," "Gemini," "prompt engineering,"  "critical thinking."\n* **Blockchain technology:** The account advocates for blockchain's uses in database management and security, contrasting it with traditional database systems.  Keywords include "blockchain," "database," "security," "crypto."\n* **Political commentary:** The account touches upon US politics, including discussions of Republican policies, ICE actions, and the impact of tariffs. Keywords include "ICE," "Republicans," "Trump," "tariffs."\n* **Economic analysis:** The author comments on economic trends, including the impact of AI on employment,  the shrinking US economy, and the effects of government policies. Keywords include "economy," "jobs," "layoffs," "tariffs."\n\n**Overall:** The account presents a perspective informed by technological expertise and a critical view of current political and economic events. The author frequently shares news articles and links, demonstrating an interest in staying updated on current affairs and disseminating information.`;
+  const tweetSummaryContent = analysisResult ? analysisResult.summary : '';
 
   if (page === 'connexion') {
     return <Connexion />;
@@ -137,28 +155,32 @@ function AnalyseProfil() {
 
         <input
           type="text"
-          placeholder="Insérez le lien d'un profil Bluesky"
+          placeholder="Insérez le handle d\'un profil Bluesky (ex: @username.bsky.social)"
           className="tweet-input"
+          value={accountHandle}
+          onChange={(e) => setAccountHandle(e.target.value)}
         />
-        <button className="analyze-button" onClick={handleAnalyzeClick}>
-          Analyser
+        <button className="analyze-button" onClick={handleAnalyzeClick} disabled={loading}>
+          {loading ? 'Analyse en cours...' : 'Analyser'}
         </button>
 
-        {showTweet && (
+        {error && <div className="error-message">{error}</div>}
+
+        {showResult && analysisResult && (
           <>
             <div className="reliability-profil">
-              <h2>Nombre de posts analysés : 50</h2>
-              <h2>Moyenne de fausses informations : 21</h2>
-              <h2>Proportions de posts politiques : 36%</h2>
-              <h2>Proportions de posts factuels : 55%</h2>
+              <h2>Nombre de posts analysés : {analysisResult.posts_analyzed_count}</h2>
+              <h2>Moyenne de fausses informations : {analysisResult.fake_news_percentage}%</h2>
+              <h2>Proportions de posts politiques : {analysisResult.political_posts_percentage}%</h2>
+              <h2>Proportions de posts factuels : {analysisResult.factual_posts_percentage}%</h2>
             </div>
 
             <div className="emotion-profil-box">
               <h2 className="emotion-profil-title">Émotions véhiculées les plus communes</h2>
               <ul className="emotion-profil-list">
-                <li><span className="emoji">🤣</span> Humour</li>
-                <li><span className="emoji">😲</span> Surprise</li>
-                <li><span className="emoji">😎</span> Tranquillité</li>
+                {analysisResult.common_emotions.map((emotion, index) => (
+                  <li key={index}><span className="emoji">{emotion.emoji}</span> {emotion.label}</li>
+                ))}
               </ul>
             </div>
 
@@ -167,7 +189,6 @@ function AnalyseProfil() {
                   Résumé du profil <span className="tweet-emoji">🔎</span>
               </div>
               <div className="tweet-content">
-                {/* Utilisation du composant TypingText ici */}
                 <TypingText text={tweetSummaryContent} speed={5} />
               </div>
             </div>

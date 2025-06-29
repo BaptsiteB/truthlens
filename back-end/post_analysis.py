@@ -5,36 +5,38 @@ import re
 
 def analyse_post(url):
     if not re.match(r"^https://bsky\.app/profile/[^/]+/post/[^/]+$", url):
-        return {"erreur": "Le format de l'URL n'est pas un lien de post Bluesky valide."}
+        return {"error": "Le format de l'URL n'est pas un lien de post Bluesky valide."}
 
-    fullpost = get_bluesky_post_info(url)
-    if not fullpost:
-        return {"erreur": f"Le post à l'URL {url} est introuvable ou n'a pas pu être récupéré."}
+    post_info = get_bluesky_post_info(url)
+    if not post_info or 'post' not in post_info or 'author' not in post_info:
+        return {"error": f"Le post à l'URL {url} est introuvable ou n'a pas pu être récupéré."}
 
-    post_text = fullpost.get('value', {}).get('text', '')
+    post_record = post_info.get('post', {}).get('record', {})
+    post_text = post_record.get('text', '')
+
     if not post_text:
-        return {"erreur": "Le post ne contient pas de texte à analyser."}
+        return {"error": "Le post ne contient pas de texte à analyser."}
 
-    created_at = fullpost.get('value', {}).get('createdAt', '')
-    author_handle = urlparse(url).path.split('/')[2]
+    gemini_analysis = extraire_json_de_reponse(appeler_gemini(post_text))
+    if not gemini_analysis:
+        return {"error": "L'analyse du post par l'IA a échoué."}
 
-    output = extraire_json_de_reponse(appeler_gemini(post_text))
 
-    is_political = output.get('isPolitical', False)
-    factual = output.get('containsFactualInformation', False)
-    emotions = output.get('emotions', [])
-    percentage_fake_news = output.get('percentageFakeNews', 0)
-    explanation = output.get('fakeNewsJustification', '')
+    percentage_fake_news = gemini_analysis.get('percentageFakeNews', 100)
+    fiabilite_score = 100 - percentage_fake_news
 
+    # Construction du JSON final pour le front-end
     output_json = {
-        "post": post_text,
-        "auteur": author_handle,
-        "cree_le": created_at,
-        "estPolitique": is_political,
-        "contientInformationFactuelle": factual,
-        "emotions": emotions,
-        "pourcentageFakeNews": percentage_fake_news,
-        "justification": explanation
+        "post_details": {
+            "author": post_info.get('author'),
+            "text": post_text,
+            "createdAt": post_record.get('createdAt')
+        },
+        "fiabilite_score": fiabilite_score,
+        "emotions": gemini_analysis.get('emotions', []),
+        "is_political": gemini_analysis.get('isPolitical', False),
+        "factual": gemini_analysis.get('containsFactualInformation', False),
+        "explanation": gemini_analysis.get('fakeNewsJustification', '')
     }
     return output_json
 

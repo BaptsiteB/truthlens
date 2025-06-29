@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Importer axios
 import Connexion from './Connexion';
 import Profil from './Profil';
 import AnalyseProfil from './AnalyseProfil';
@@ -115,13 +116,31 @@ const FallingLetters = ({ words }) => {
 
 
 function App() {
-  const [score_barre, setScoreBarre] = useState(fiabilite_score);
+  const [score_barre, setScoreBarre] = useState(0); // Initialiser à 0
   const [showTweet, setShowTweet] = useState(false);
   const [page, setPage] = useState('app');
   const words = ['estebanmartel', 'baptistebilla', 'viveladata', 'projettruthlens'];
+  const [postUrl, setPostUrl] = useState('');
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleAnalyzeClick = () => {
-    setShowTweet(true); // simulation
+  const handleAnalyzeClick = async () => {
+    setLoading(true);
+    setError(null);
+    setAnalysisResult(null);
+    setShowTweet(false);
+
+    try {
+      const response = await axios.post('http://localhost:5000/vet/post', { url: postUrl });
+      setAnalysisResult(response.data);
+      setScoreBarre(response.data.fiabilite_score); // Mettre à jour la barre de score
+      setShowTweet(true);
+    } catch (err) {
+      setError(err.response ? err.response.data.error : "Une erreur s'est produite");
+      setShowTweet(false);
+    }
+    setLoading(false);
   };
 
   if (page === 'connexion') {
@@ -171,39 +190,43 @@ function App() {
           type="text"
           placeholder="Insérez le lien d'un post Bluesky"
           className="tweet-input"
+          value={postUrl}
+          onChange={(e) => setPostUrl(e.target.value)}
         />
-        <button className="analyze-button" onClick={handleAnalyzeClick}>
-          Analyser
+        <button className="analyze-button" onClick={handleAnalyzeClick} disabled={loading}>
+          {loading ? 'Analyse en cours...' : 'Analyser'}
         </button>
 
-        {showTweet && (
+        {error && <div className="error-message">{error}</div>}
+
+        {showTweet && analysisResult && (
           <>
             <div className="tweet-card">
               <div className="tweet-header">
                 <span className="tweet-author">
-                  Emily <span className="tweet-emoji">🦋</span>
+                  {analysisResult.post_details?.author.displayName} <span className="tweet-emoji">🦋</span>
                 </span>
-                <span className="tweet-username">@emilyliu.me</span>
+                <span className="tweet-username">@{analysisResult.post_details?.author.handle}</span>
               </div>
               <div className="tweet-content">
-                logging on for my shift at the posting factory
+                {analysisResult.post_details?.text}
               </div>
               <div className="tweet-date">
-                Jul 3, 2023 at 11:11 AM
+                 {new Date(analysisResult.post_details?.createdAt).toLocaleString()}
               </div>
             </div>
 
             <div className="reliability">
-              <h2>Fiabilité : {score_barre}%</h2>
-              <div className="heart-bar">{renderHeartBar(score_barre)}</div>
+              <h2>Fiabilité : {analysisResult.fiabilite_score}%</h2>
+              <div className="heart-bar">{renderHeartBar(analysisResult.fiabilite_score)}</div>
             </div>
 
             <div className="emotion-box">
               <h2 className="emotion-title">Émotions engendrées</h2>
               <ul className="emotion-list">
-                <li><span className="emoji">🤣</span> Humour</li>
-                <li><span className="emoji">😲</span> Surprise</li>
-                <li><span className="emoji">😎</span> Tranquillité</li>
+                {analysisResult.emotions.map((emotion, index) => (
+                  <li key={index}><span className="emoji">{emotion.emoji}</span> {emotion.label}</li>
+                ))}
               </ul>
             </div>
           </>

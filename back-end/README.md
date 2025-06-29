@@ -7,7 +7,7 @@ Cette API fournit des outils pour analyser le contenu du réseau social Bluesky.
 1.  **Prérequis :** Python 3 et pip installés.
 
 2.  **Installation des dépendances :**
-    Assurez-vous d'être dans le dossier `back-end-refacto` et exécutez :
+    Assurez-vous d'être dans le dossier `back-end` et exécutez :
     ```sh
     pip install -r requirements.txt
     ```
