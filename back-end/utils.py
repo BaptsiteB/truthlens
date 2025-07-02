@@ -70,6 +70,16 @@ def appeler_gemini_freeform(prompt: str) -> str:
 
 def get_bluesky_post_info(post_url: str):
     try:
+        load_dotenv()
+        bsky_handle = os.getenv("BLUESKY_HANDLE")
+        bsky_password = os.getenv("BLUESKY_APP_PASSWORD")
+        if not bsky_handle or not bsky_password:
+            print("Erreur : BLUESKY_HANDLE ou BLUESKY_APP_PASSWORD non trouvé dans le fichier .env.")
+            return None
+
+        client = Client()
+        client.login(bsky_handle, bsky_password)
+
         parsed_url = urlparse(post_url)
         path_parts = parsed_url.path.strip('/').split('/')
         if not (parsed_url.netloc == 'bsky.app' and len(path_parts) == 4 and path_parts[0] == 'profile' and path_parts[2] == 'post'):
@@ -77,21 +87,19 @@ def get_bluesky_post_info(post_url: str):
         handle = path_parts[1]
         rkey = path_parts[3]
         
-        client = Client()
-        
         profile = client.get_profile(actor=handle)
-
-        uri = f"at://{profile.did}/app.bsky.feed.post/{rkey}"
-        response = client.get_post(post=uri)
         
-        post_record = json.loads(response.post.model_dump_json())
+        uri = f"at://{profile.did}/app.bsky.feed.post/{rkey}"
+        response = client.get_post_thread(uri=uri, depth=0)
+        
+        post_record = json.loads(response.thread.post.model_dump_json())
 
         return {
             "post": post_record,
             "author": {
-                "handle": profile.handle,
-                "displayName": profile.display_name,
-                "did": profile.did
+                "handle": response.thread.post.author.handle,
+                "displayName": response.thread.post.author.display_name,
+                "did": response.thread.post.author.did
             }
         }
     except Exception as e:

@@ -15,7 +15,7 @@ def test_analyse_compte():
 def test_analyse_post():
     print("--- Test de l'analyse de post ---")
     # Remplacez par une URL de post Bluesky que vous souhaitez tester
-    url_a_tester = "https://bsky.app/profile/jay.bsky.team/post/3kuhv3f2c2u2u"
+    url_a_tester = "https://bsky.app/profile/estellefaye.bsky.social/post/3lsxzd2ycxb26"
     print(f"Analyse du post : {url_a_tester}")
     resultat = analyse_post(url_a_tester)
     print(json.dumps(resultat, indent=2, ensure_ascii=False))
