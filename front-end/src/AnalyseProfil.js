@@ -184,9 +184,13 @@ function AnalyseProfil() {
             <div className="emotion-profil-box">
               <h2 className="emotion-profil-title">Émotions véhiculées les plus communes</h2>
               <ul className="emotion-profil-list">
-                {analysisResult.common_emotions.map((emotion, index) => (
-                  <li key={index}><span className="emoji">{emotion.emoji}</span> {emotion.label}</li>
-                ))}
+                {analysisResult.common_emotions && analysisResult.common_emotions.length > 0 ? (
+                  analysisResult.common_emotions.map((emotion, index) => (
+                    <li key={index}><span className="emoji">{emotion.emoji}</span> {emotion.label}</li>
+                  ))
+                ) : (
+                  <li>Aucune émotion dominante détectée.</li>
+                )}
               </ul>
             </div>
 

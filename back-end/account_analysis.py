@@ -43,7 +43,7 @@ def analyse_bluesky_account(target_handle, sample_size=50, fetch_limit=50):
 
     fake_news_percentages = []
     fake_news_justifications = []
-    emotions_counter = Counter()
+    all_emotions_list = []
     political_count = 0
     factual_count = 0
     analysed_count = 0
@@ -73,15 +73,32 @@ def analyse_bluesky_account(target_handle, sample_size=50, fetch_limit=50):
         fake_news_percentages.append(output.get('percentageFakeNews', 0))
         if output.get('fakeNewsJustification'):
             fake_news_justifications.append(output['fakeNewsJustification'])
+        
         emotions = output.get('emotions', [])
-        emotions_counter.update(emotions)
+        if isinstance(emotions, list):
+            all_emotions_list.extend(emotions) # Utiliser extend au lieu de append
+
         if output.get('isPolitical', False):
             political_count += 1
         if output.get('containsFactualInformation', False):
             factual_count += 1
 
     avg_fake_news = sum(fake_news_percentages) / len(fake_news_percentages) if fake_news_percentages else 0
-    most_common_emotions = [e for e, _ in emotions_counter.most_common(5)]
+    
+    # Logique de comptage des émotions corrigée et simplifiée
+    if all_emotions_list:
+        # On s'assure que les éléments sont bien des dictionnaires avec un 'label'
+        valid_emotions = [tuple(e.items()) for e in all_emotions_list if isinstance(e, dict) and 'label' in e]
+        if valid_emotions:
+            emotion_counts = Counter(valid_emotions)
+            most_common_tuples = emotion_counts.most_common(5)
+            # Reconvertir les tuples en dictionnaires pour le JSON final
+            most_common_emotions = [dict(e_tuple) for e_tuple, count in most_common_tuples]
+        else:
+            most_common_emotions = []
+    else:
+        most_common_emotions = []
+
     political_ratio = (political_count / analysed_count) * 100 if analysed_count else 0
     factual_ratio = (factual_count / analysed_count) * 100 if analysed_count else 0
 
