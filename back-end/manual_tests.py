@@ -15,7 +15,7 @@ def test_analyse_compte():
 def test_analyse_post():
     print("--- Test de l'analyse de post ---")
     # Remplacez par une URL de post Bluesky que vous souhaitez tester
-    url_a_tester = "https://bsky.app/profile/estellefaye.bsky.social/post/3lsxzd2ycxb26"
+    url_a_tester = "https://bsky.app/profile/cerfiainfo.bsky.social/post/3lefegpnb6k2b"
     print(f"Analyse du post : {url_a_tester}")
     resultat = analyse_post(url_a_tester)
     print(json.dumps(resultat, indent=2, ensure_ascii=False))
@@ -32,7 +32,7 @@ def test_analyse_tendance():
 if __name__ == "__main__":
     print("Début des tests manuels...")
     # Décommentez les fonctions que vous souhaitez exécuter
-    #test_analyse_compte()
-    test_analyse_post()
+    test_analyse_compte()
+    #test_analyse_post()
     #test_analyse_tendance()
     print("Fin des tests manuels.")

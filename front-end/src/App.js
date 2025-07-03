@@ -63,6 +63,29 @@ const renderHeartBar = (score) => {
   return hearts;
 };
 
+const getEmotionEmoji = (emotion) => {
+  switch (emotion) {
+    case 'Surprise':
+      return '😮';
+    case 'Anticipation':
+      return '🤔';
+    case 'Fear':
+      return '😨';
+    case 'Joy':
+      return '😄';
+    case 'Sadness':
+      return '😢';
+    case 'Anger':
+      return '😠';
+    case 'Disgust':
+      return '🤢';
+    case 'Trust':
+      return '🤗';
+    default:
+      return '❓';
+  }
+};
+
 
 const FallingLetters = ({ words }) => {
   const [instances, setInstances] = useState([]);
@@ -225,7 +248,7 @@ function App() {
               <h2 className="emotion-title">Émotions engendrées</h2>
               <ul className="emotion-list">
                 {analysisResult.emotions.map((emotion, index) => (
-                  <li key={index}><span className="emoji">{emotion.emoji}</span> {emotion.label}</li>
+                  <li key={index}><span className="emoji">{getEmotionEmoji(emotion)}</span> {emotion}</li>
                 ))}
               </ul>
             </div>

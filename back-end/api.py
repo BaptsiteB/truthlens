@@ -7,6 +7,17 @@ from trend_analysis import analyser_tendance_flux, DEFAULT_WHATS_HOT_FEED_URI
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/vet/account', methods=['POST'])
+def vet_account():
+    data = request.get_json()
+    if not data or 'account_handle' not in data:
+        return jsonify({"error": "Handle du compte manquant"}), 400
+    try:
+        result = analyse_bluesky_account(data['account_handle'])
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/vet/post', methods=['POST'])
 def vet_post():
     data = request.get_json()
@@ -20,17 +31,6 @@ def vet_post():
         return jsonify(result)
     except Exception as e:
         # Pour les erreurs inattendues
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/vet/account', methods=['POST'])
-def vet_account():
-    data = request.get_json()
-    if not data or 'handle' not in data:
-        return jsonify({"error": "Handle du compte manquant"}), 400
-    try:
-        result = analyse_bluesky_account(data['handle'])
-        return jsonify(result)
-    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/vet/trend', methods=['GET'])

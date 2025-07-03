@@ -94,12 +94,17 @@ function AnalyseProfil() {
     setLoading(true);
     setError(null);
     setAnalysisResult(null);
-    setShowResult(false);
 
     try {
-      const response = await axios.post('http://localhost:5000/vet/account', { account_handle: accountHandle });
+      let handle = accountHandle;
+      if (handle.includes('bsky.app/profile/')) {
+        handle = handle.substring(handle.lastIndexOf('/') + 1);
+      }
+      if (handle.startsWith('@')) {
+        handle = handle.substring(1);
+      }
+      const response = await axios.post('http://localhost:5000/vet/account', { account_handle: handle });
       setAnalysisResult(response.data);
-      setShowResult(true);
     } catch (err) {
       setError(err.response ? err.response.data.error : "Une erreur s'est produite");
       setShowResult(false);
