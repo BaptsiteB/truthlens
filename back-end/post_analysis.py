@@ -32,7 +32,7 @@ def analyse_post(url):
             "text": post_text,
             "createdAt": post_record.get('createdAt')
         },
-        "fiabilite_score": fiabilite_score,
+        "fiabilite_score": round(fiabilite_score, 1),
         "emotions": gemini_analysis.get('emotions', []),
         "is_political": gemini_analysis.get('isPolitical', False),
         "factual": gemini_analysis.get('containsFactualInformation', False),

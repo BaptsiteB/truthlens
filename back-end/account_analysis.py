@@ -49,18 +49,24 @@ def analyse_bluesky_account(target_handle, sample_size=50, fetch_limit=50):
     analysed_count = 0
     posts_texts = []
 
-    for post in sampled_posts:
+    for i, post in enumerate(sampled_posts):
+        print(f"Analyse du post {i+1}/{len(sampled_posts)}...")
         try:
             text = post['post']['record']['text']
         except (KeyError, AttributeError):
             text = ''
         if not text:
+            print("Post sans texte, ignoré.")
             continue
         try:
+            print("Appel à Gemini...")
             output = extraire_json_de_reponse(appeler_gemini(text))
-        except Exception:
+            print("Retour de Gemini.")
+        except Exception as e:
+            print(f"Erreur lors de l'appel à Gemini : {e}")
             continue
         if not output:
+            print("Pas de JSON valide retourné par Gemini, ignoré.")
             continue
         posts_texts.append(text)
         analysed_count += 1
@@ -76,8 +82,8 @@ def analyse_bluesky_account(target_handle, sample_size=50, fetch_limit=50):
 
     avg_fake_news = sum(fake_news_percentages) / len(fake_news_percentages) if fake_news_percentages else 0
     most_common_emotions = [e for e, _ in emotions_counter.most_common(5)]
-    political_ratio = political_count / analysed_count if analysed_count else 0
-    factual_ratio = factual_count / analysed_count if analysed_count else 0
+    political_ratio = (political_count / analysed_count) * 100 if analysed_count else 0
+    factual_ratio = (factual_count / analysed_count) * 100 if analysed_count else 0
 
     if posts_texts:
         joined_text = '\n'.join(posts_texts[:50])
@@ -92,13 +98,13 @@ def analyse_bluesky_account(target_handle, sample_size=50, fetch_limit=50):
         topic_summary = "Aucun texte à analyser."
 
     result_json = {
-        "profil": target_handle,
-        "total_posts_analyses": analysed_count,
-        "pourcentage_moyen_fake_news": avg_fake_news,
-        "emotions_plus_courantes": most_common_emotions,
-        "proportion_posts_politiques": political_ratio,
-        "proportion_posts_factuels": factual_ratio,
-        "resume_sujets": topic_summary
+        "profile": target_handle,
+        "posts_analyzed_count": analysed_count,
+        "fake_news_percentage": round(avg_fake_news, 1),
+        "common_emotions": most_common_emotions,
+        "political_posts_percentage": round(political_ratio, 1),
+        "factual_posts_percentage": round(factual_ratio, 1),
+        "summary": topic_summary
     }
     return result_json
 

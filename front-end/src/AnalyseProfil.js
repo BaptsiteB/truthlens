@@ -105,6 +105,7 @@ function AnalyseProfil() {
       }
       const response = await axios.post('http://localhost:5000/vet/account', { account_handle: handle });
       setAnalysisResult(response.data);
+      setShowResult(true); // Afficher les résultats en cas de succès
     } catch (err) {
       setError(err.response ? err.response.data.error : "Une erreur s'est produite");
       setShowResult(false);
