@@ -198,8 +198,8 @@ function App() {
           <a href="#" onClick={() => setPage('accueil')}>Posts</a>
           <a href="#" onClick={() => setPage('analyseprofil')}>Profils</a>
           <a href="#" onClick={() => setPage('analysetendance')}>Tendances</a>
-          <a href="#" onClick={() => setPage('profil')}>Mon profil</a>
-          <a href="#" onClick={() => setPage('connexion')}>Se connecter</a>
+          {/* <a href="#" onClick={() => setPage('profil')}>Mon profil</a> */}
+          {/* <a href="#" onClick={() => setPage('connexion')}>Se connecter</a> */}
         </nav>
       </header>
 
