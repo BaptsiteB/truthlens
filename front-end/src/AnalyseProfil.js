@@ -96,7 +96,9 @@ function AnalyseProfil() {
     setAnalysisResult(null);
 
     try {
-      let handle = accountHandle;
+      // On nettoie le handle de tout caractère invisible ou spécial non désiré
+      let handle = accountHandle.replace(/[\u200B-\u200D\uFEFF\u202A-\u202E]/g, '').trim();
+
       if (handle.includes('bsky.app/profile/')) {
         handle = handle.substring(handle.lastIndexOf('/') + 1);
       }

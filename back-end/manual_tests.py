@@ -6,7 +6,7 @@ from trend_analysis import analyser_tendance_flux, DEFAULT_WHATS_HOT_FEED_URI
 def test_analyse_compte():
     print("--- Test de l'analyse de compte ---")
     # Remplacez par un handle Bluesky que vous souhaitez tester
-    handle_a_tester = "https://bsky.app/profile/iwillnotbesilenced.bsky.social"
+    handle_a_tester = "@softtail65.bsky.social"
     print(f"Analyse du compte : {handle_a_tester}")
     resultat = analyse_bluesky_account(handle_a_tester, sample_size=5, fetch_limit=10)
     print(json.dumps(resultat, indent=2, ensure_ascii=False))

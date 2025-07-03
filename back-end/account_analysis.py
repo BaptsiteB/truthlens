@@ -99,6 +99,28 @@ def analyse_bluesky_account(target_handle, sample_size=50, fetch_limit=50):
     else:
         most_common_emotions = []
 
+    # Mécanisme de secours si aucune émotion n'est trouvée
+    if not most_common_emotions and posts_texts:
+        print("Aucune émotion commune trouvée, tentative d'analyse globale...")
+        try:
+            joined_text = "\\n".join(posts_texts[:50])
+            prompt_emotion_fallback = f"""
+            Analysez le sentiment général des publications suivantes et retournez les 1 ou 2 émotions les plus dominantes.
+            Répondez UNIQUEMENT avec un objet JSON contenant une clé "emotions" qui est une liste d'objets, chaque objet ayant les clés "label" (en français) et "emoji".
+            Exemple: {{"emotions": [{{"label": "Colère", "emoji": "😠"}}]}}
+
+            --- DÉBUT DES POSTS ---
+            {joined_text}
+            --- FIN DES POSTS ---
+            """
+            fallback_response = extraire_json_de_reponse(appeler_gemini_freeform(prompt_emotion_fallback))
+            if fallback_response and 'emotions' in fallback_response:
+                most_common_emotions = fallback_response['emotions']
+                print(f"Émotions de secours trouvées : {most_common_emotions}")
+        except Exception as e:
+            print(f"Erreur durant l'analyse des émotions de secours : {e}")
+
+
     political_ratio = (political_count / analysed_count) * 100 if analysed_count else 0
     factual_ratio = (factual_count / analysed_count) * 100 if analysed_count else 0
 
